@@ -11,10 +11,5 @@ then
 	exit 1
 fi
 
-gcc $1 -o $2
-if [ $? -eq 0 ]
-then
-	exec "./$2"
-else
-	echo "There are some errors while compiling." >&2
-fi
+gcc $1 -o $2 && exec "./$2"
+exit $?
