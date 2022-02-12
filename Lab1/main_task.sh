@@ -10,18 +10,18 @@ then
 		exit 0
 	fi
 
-	(
+	{
 		echo "Wrong count of arguments. Correct count is 2."
 		echo "Use -h to see help."
-	) >&2
+	} >&2
 
 	exit 1
 elif [ ! -d $1 ]
 then
-	(
+	{
 		echo "First argument must be directory."
 		echo "Use -h to see help."
-	) >&2
+	} >&2
 	exit 1
 fi
 
