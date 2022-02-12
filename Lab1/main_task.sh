@@ -10,17 +10,20 @@ then
 		exit 0
 	fi
 
-	echo "Wrong count of arguments. Correct count is 2." >&2
-	echo "Use -h to see help." >&2
+	(
+		echo "Wrong count of arguments. Correct count is 2."
+		echo "Use -h to see help."
+	) >&2
+
 	exit 1
 elif [ ! -d $1 ]
 then
-	echo "First argument must be directory." >&2
-	echo "Use -h to see help." >&2
+	(
+		echo "First argument must be directory."
+		echo "Use -h to see help."
+	) >&2
 	exit 1
 fi
-
-echo -e "Files count\tFiles size\tPath" > "$2"
 
 for D in `find $1 -type d`
 do
