@@ -17,18 +17,18 @@ const int file_path_delta = 10;
 int main(int argc, char const *argv[])
 {
     if(argc != 4){
-        printf("Invalid arguments.\n");
-        printf("Command format: %s directory min_size max_size.\n", argv[0]);
-        printf("directory: start directory to check.\n");
-        printf("min_size: minimal size of file in bytes.\n");
-        printf("max_size: maximal size of file in bytes.\n");
+        fprintf(stderr, "Invalid arguments.\n");
+        fprintf(stderr, "Command format: %s directory min_size max_size.\n", argv[0]);
+        fprintf(stderr, "directory: start directory to check.\n");
+        fprintf(stderr, "min_size: minimal size of file in bytes.\n");
+        fprintf(stderr, "max_size: maximal size of file in bytes.\n");
         return 1;
     }
 
     int min_size = strtol(argv[2], NULL, 10);
     int max_size = strtol(argv[3], NULL, 10);
     if(min_size < 0 || max_size < 0){
-        printf("Size cannot be less than 0 bytes!\n");
+        fprintf(stderr, "Size cannot be less than 0 bytes!\n");
         return 1;
     }
 
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 
     file_paths = malloc(sizeof(Path) * file_path_delta);
     if(!file_paths){
-        printf("Error while alloc memory!\n");
+        perror("malloc");
         return 1;
     }
 
@@ -58,7 +58,7 @@ void add_path(const char *file_path){
         file_paths_max_count += file_path_delta;
         file_paths = realloc(file_paths, sizeof(Path) * file_paths_max_count);
         if(!file_paths){
-            printf("Error while relloc memory!\n");
+            perror("realloc");
             file_paths_max_count -= file_path_delta;
             return;
         }
@@ -126,7 +126,7 @@ void output_dublicates(){
 int check_directory(char const *dir_name, int min_size, int max_size){
     DIR *current_dir = opendir(dir_name);
     if(!current_dir){
-        printf("Error while opening directory \'%s\'!\n", dir_name);
+        perror("opendir");
         return 1;
     }
 
@@ -151,7 +151,7 @@ int check_directory(char const *dir_name, int min_size, int max_size){
     }
 
     if(closedir(current_dir)){
-        printf("Error while closing directory \'%s\'!\n", dir_name);
+        perror("closedir");
         return 1;
     }
 

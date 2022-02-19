@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 int print_directory(char const *dir_name){
     DIR *current_dir = opendir(dir_name);
     if(!current_dir){
-        printf("Error while opening directory \'%s\'!\n", dir_name);
+        perror("opendir");
         return 1;
     }
 
@@ -26,11 +26,11 @@ int print_directory(char const *dir_name){
 
     int i = 1;
     while((d = readdir(current_dir))){
-        printf("%d. %s\n", i++, d->d_name);
+        printf("%3d.\t%s\n", i++, d->d_name);
     }
 
     if(closedir(current_dir)){
-        printf("Error while closing directory \'%s\'!\n", dir_name);
+        perror("closedir");
         return 1;
     }
 

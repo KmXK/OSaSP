@@ -5,14 +5,14 @@ const int stopChar = 6;
 int main(int argc, char const *argv[])
 {
 	if(argc != 2){
-		printf("Invalid arguments.\nCommand format: %s filename\n", argv[0]);
-		printf("filename: name of file to write.");
+		fprintf(stderr, "Invalid arguments.\nCommand format: %s filename\n", argv[0]);
+		fprintf(stderr, "filename: name of file to write.\n");
 		return 1;
 	}
 
 	FILE *file = fopen(argv[1], "w+");
 	if(!file){
-		printf("Error while creating file.\n");
+		perror("fopen");
 		return 1;
 	}
 
@@ -21,13 +21,13 @@ int main(int argc, char const *argv[])
 		if(c == stopChar)
 			break;
 		if(fputc(c, file) == EOF){
-			printf("Error while writing to file!\n");
+			perror("fputc");
 			return 1;
 		}
 	}
 
 	if(fclose(file)){
-		printf("Error while closing file!\n");
+		perror("fclose");
 		return 1;
 	}
 
