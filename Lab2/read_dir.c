@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
     print_directory("./");
     printf("---------------------\n");
     printf("Root directory:\n");
-    print_directory("../");
+    print_directory("/");
 
     return 0;
 }
