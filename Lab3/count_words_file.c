@@ -70,7 +70,6 @@ int main(int argc, char **argv){
     long countBytes = 0;
     char isCorrentWord = 0;
 
-
     // Здесь слово = совокупность букв, ограниченная символами табуляции, перехода строки или пробелами
     while(read(file, &c, 1) == 1){
         if(c == ' ' || c == '\t' || c == '\n' || c == '\r'){
@@ -79,6 +78,7 @@ int main(int argc, char **argv){
             }
             current = 0;
             canBeWord = 1;
+            isCorrentWord = 1;
         }
         else if(canBeWord) {
             if(isCorrentWord){

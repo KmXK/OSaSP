@@ -30,7 +30,7 @@ int main(){
                 _exit(EXIT_SUCCESS);
             }
             case -1:{   // error
-                printf("Error while creating child process.\n");
+                fprintf(stderr, "Error while creating child process.\n");
                 _exit(errno);
             }
             default:{   // parent
