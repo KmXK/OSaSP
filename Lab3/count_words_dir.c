@@ -31,7 +31,8 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    int n = atoi(argv[3]); // strtoi(argv[2], NULL, 10);
+    int n = strtoi(argv[2], NULL, 10);
+    // int n = atoi(argv[3]);
     // strtoi я всё-таки на нашёл
     if(n <= 0 && n > MAX_PROCESSES_COUNT){
         fprintf(stderr, "Max processes count cannot be less or equal 0 and more than %i!\n", MAX_PROCESSES_COUNT);
