@@ -96,6 +96,7 @@ int main(int argc, char **argv){
                 else{
                     current = 0;
                     canBeWord = 0;
+                    isCorrentWord = 0;
                 }
             }
         }

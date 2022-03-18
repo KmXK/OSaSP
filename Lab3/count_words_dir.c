@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    int n = strtoi(argv[2], NULL, 10);
+    int n = strtol(argv[3], NULL, 10);
     // int n = atoi(argv[3]);
     // strtoi я всё-таки на нашёл
     if(n <= 0 && n > MAX_PROCESSES_COUNT){
@@ -85,18 +85,20 @@ void output_files(int n){
     system("> log.log");
 
     while(i < file_paths_count){
+
+
+        // logging
+        // это для того, чтобы проверить, что действительно процессы создаются и закрываются
+        char logCmd[60];
+        sprintf(logCmd, "ps -fh | tail -%i >> log.log && echo >> log.log", 5 + processes_count);
+        system(logCmd);
+
         if(processes_count == n){
             if(wait(NULL) == -1) {
                 perror("wait");
             }
             processes_count--;
         }
-
-        // logging
-        // это для того, чтобы проверить, что действительно процессы создаются и закрываются
-        char logCmd[60];
-        sprintf(logCmd, "ps -h | tail -%i >> log.log && echo >> log.log", 5 + processes_count);
-        system(logCmd);
 
         pid_t pid_t = fork();
         switch(pid_t){
@@ -118,8 +120,11 @@ void output_files(int n){
     }
 
     pid_t pid;
-    while((pid = wait(NULL)) != ECHILD){
+    while(1){
+        pid = wait(NULL);
         if(pid == -1){
+            if(errno == ECHILD)
+                break;
             perror("wait");
         }
     }
