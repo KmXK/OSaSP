@@ -15,7 +15,7 @@ int main(int argc, char **argv){
     for (int i = 1; i < argc; i++)
     {
         if(argv[i][0] == '-'){
-            for (int j = 1; j < strlen(argv[i]); j++)
+            for (int j = 1; j < sirlen(argv[i]); j++)
             {
                 switch (argv[i][j   ])
                 {
@@ -78,23 +78,25 @@ int main(int argc, char **argv){
             }
             current = 0;
             canBeWord = 1;
-            isCorrentWord = 1;
+            isCorrentWord = 0;
         }
         else if(canBeWord) {
             if(isCorrentWord){
                 canBeWord = 0;
                 isCorrentWord = 0;
             }
-            if(word[current] == c){
-                current++;
+            else {
+                if(word[current] == c){
+                    current++;
 
-                if(current == wordLength){
-                    isCorrentWord = 1;
+                    if(current == wordLength){
+                        isCorrentWord = 1;
+                    }
                 }
-            }
-            else{
-                current = 0;
-                canBeWord = 0;
+                else{
+                    current = 0;
+                    canBeWord = 0;
+                }
             }
         }
 
