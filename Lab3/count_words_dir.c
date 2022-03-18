@@ -69,6 +69,15 @@ void add_path(const char *file_path){
 }
 
 void output_files(int n){
+    FILE *testFile;
+    if(testFile = fopen("./count_words_file.out", "r")){
+        fclose(testFile);
+    }
+    else {
+        fprintf(stderr, "File ./count_words_file.out doesn't exist\n");
+        return;
+    }
+
     int i = 0;
     int processes_count = 0;
     system("> log.log");
@@ -82,7 +91,7 @@ void output_files(int n){
         // logging
         // это для того, чтобы проверить, что действительно процессы создаются и закрываются
         char logCmd[60];
-        sprintf(logCmd, "ps -h | tail -%i >> log.log && echo >> log.log", 5 + n);
+        sprintf(logCmd, "ps -h | tail -%i >> log.log && echo >> log.log", 5 + processes_count);
         system(logCmd);
 
         pid_t pid_t = fork();
@@ -92,8 +101,8 @@ void output_files(int n){
                 continue;
             }
             case 0:{
-                char *filename = strdup(file_paths[i]);
-                if(execl("./count_words_file.out", "count_words_file.out", filename, word, NULL) == -1){
+                if(execl("./count_words_file.out", "count_words_file.out", file_paths[i], word, (char *)0) == -1){
+                    perror("execl");
                     _exit(127);
                 }
             }
