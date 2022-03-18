@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <wait.h>
+#include <errno.h>
 
 #define MAX_PROCESSES_COUNT 1000
 
@@ -85,7 +86,9 @@ void output_files(int n){
 
     while(i < file_paths_count){
         if(processes_count == n){
-            while(wait(NULL) == -1);
+            if(wait(NULL) == -1) {
+                perror("wait");
+            }
             processes_count--;
         }
 
@@ -114,7 +117,12 @@ void output_files(int n){
         }
     }
 
-    while(wait(NULL) != -1);
+    pid_t pid;
+    while((pid = wait(NULL)) != ECHILD){
+        if(pid == -1){
+            perror("wait");
+        }
+    }
 }
 
 int check_directory(char const *dir_name){
