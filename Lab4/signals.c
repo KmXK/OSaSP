@@ -45,8 +45,6 @@ void outputInfo(char *status, int sigNum);
 void outputHeader();
 
 int main() {
-    setlocale(LC_ALL, "");
-
     pids[0] = getpid();
 
     struct sigaction sa;

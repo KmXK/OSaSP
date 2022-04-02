@@ -43,7 +43,7 @@ int main() {
             // child
             case 0: {
                 printf("I'm child #%d. My pid is %d. My ppid is %d. ", childIndex, getpid(), getppid());
-                getTime();
+                //getTime();
                 putc('\n', stdout);
 
 //                sa.sa_sigaction = childSignalAction;
