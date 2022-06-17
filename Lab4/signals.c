@@ -3,7 +3,6 @@
 #include <signal.h>
 #include <wait.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include <locale.h>
 #include <time.h>
 
@@ -33,6 +32,7 @@ Pair pairs[] = {
 
 pid_t pids[PROCESSES_COUNT];
 int nodeIndex;
+int startNodeIndex;
 
 // [0] - SIGUSR1
 // [1] - SIGUSR2
@@ -58,6 +58,8 @@ int main() {
         }
 
         if(nodeIndex == pairs[i].to && pairs[i].signal != NOSIG) {
+            if(!startNodeIndex)
+                startNodeIndex = pairs[i].to;
             signal(pairs[i].signal, sigusr);
         }
 
@@ -76,8 +78,9 @@ int main() {
                     break;
                 }
                 default: {
-                    if(!pgid)
+                    if(!pgid) {
                         pgid = pid;
+                    }
                     setpgid(pid, pgid);
                     pids[pairs[i].to] = pid;
 
@@ -92,11 +95,13 @@ int main() {
     sleep(1);
 
     // start point
-    if(nodeIndex == 1){
+    if(nodeIndex == startNodeIndex){
         int sig = signalChildren(nodeIndex, SIGDEF);
         if(sig != NOSIG) {
             int sigNum = sig == SIGUSR1 ? 1 : 2;
             sendedSignalsCount[sigNum - 1]++;
+
+            // sendedSignalCount[!(sig == SIGUSR1)]++;
         }
     }
 
@@ -114,7 +119,7 @@ int main() {
 void sigusr(int sig) {
     outputInfo("get", sig == SIGUSR1 ? 1 : 2);
 
-    if(nodeIndex == 1 && (sendedSignalsCount[0] + sendedSignalsCount[1]) == 110) {
+    if(nodeIndex == 1 && (sendedSignalsCount[0] + sendedSignalsCount[1]) == 101) {
         kill(getpid(), SIGTERM);
         return;
     }
@@ -128,7 +133,7 @@ void sigusr(int sig) {
 }
 
 // trying to get children pgid
-// if success then 1 returnd, else 0 returned
+// if success then 1 returned, else 0 returned
 // pgid: children pgid
 // sig: children process group sig (NULLABLE)
 int tryToGetChildrenPGID(int index, pid_t *pgid, int *sig) {
@@ -145,10 +150,11 @@ int tryToGetChildrenPGID(int index, pid_t *pgid, int *sig) {
 }
 
 // sig: signal to send
-// =  SIGDEF : send signal by pairs table
+// == SIGDEF : send signal by pairs table
 // != SIGDEF : send sig
 // return sended signal or NOSIG if children don't exist
 int signalChildren(int index, int sig) {
+
     int s;
     pid_t pgid;
     if(tryToGetChildrenPGID(index, &pgid, &s)) {

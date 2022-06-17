@@ -27,14 +27,14 @@ int main(int argc, char const *argv[])
         fprintf(stderr, "Invalid arguments.\n");
         fprintf(stderr, "Command format: %s directory word n.\n", argv[0]);
         fprintf(stderr, "directory: start directory to check.\n");
-        fprintf(stderr, "word: word to check.\n");
+        fprintf(stderr, "word: word to count.\n");
         fprintf(stderr, "n: max count of processes in one moment.\n");
         return 1;
     }
 
     int n = strtol(argv[3], NULL, 10);
     // int n = atoi(argv[3]);
-    // strtoi я всё-таки на нашёл
+    // strtoi я всё-таки не нашёл
     if(n <= 0 && n > MAX_PROCESSES_COUNT){
         fprintf(stderr, "Max processes count cannot be less or equal 0 and more than %i!\n", MAX_PROCESSES_COUNT);
         return 1;
